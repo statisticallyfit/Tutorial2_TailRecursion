@@ -112,7 +112,7 @@ object TailRecursiveMadness {
       */
     def factorial(n:Int):Int = {
 
-      //@tailrec
+      @tailrec
       def fac(n:Int, accum:Int):Int = {
         if (n <= 1) accum else fac(n - 1, accum * n)
       }
@@ -133,7 +133,7 @@ object TailRecursiveMadness {
       // then n=k-2, a=1 b=2
       // then n=k-3, a=2 b=3
       // until you reach n=0
-      //@tailrec
+      @tailrec
       def fibInt(n:Int, a:BigInt=0, b:BigInt=1):BigInt = {
         if (n == 0) a else fibInt(n-1, b, a + b)
       }
@@ -205,7 +205,7 @@ object TailRecursiveMadness {
       *
       * This is going to be our function for choosing the nextNumeral
       */
-    // @tailrec
+    @tailrec
     def nextNumeral(n:Int, numerals:List[(String, Int)] = allNumerals):(String, Int) = {
       // either the head pair is the one we want, or call ourselves recursively for the tail
       numerals match {
@@ -221,7 +221,7 @@ object TailRecursiveMadness {
 
       // Now define an inner tail recursive function that will build up our Roman numeral
       // We keep the string we've built so far in s
-      //@tailrec
+      @tailrec
       def intRom(n:Int, s:String = ""):String = {
         if (n == 0) s else {
           val (c, v) = nextNumeral(n)
@@ -264,7 +264,7 @@ object TailRecursiveMadness {
       * If not, have two outer cases. Is the destination list empty or not?
       * If not, does the number at the head of the source list match or not match dest(1)?
       */
-    //@tailrec
+    @tailrec
     def nextLine(source:List[Int], dest:List[Int] = Nil):List[Int] = {
       source match {
         case Nil => dest.reverse
@@ -280,7 +280,7 @@ object TailRecursiveMadness {
       */
     def puzzle(n:Int):List[Int] = {
 
-      //@tailrec
+      @tailrec
       def intPuz(n:Int, line:List[Int] = List(1)):List[Int] = {
         if (n == 0) line else intPuz(n - 1, nextLine(line))
       }
