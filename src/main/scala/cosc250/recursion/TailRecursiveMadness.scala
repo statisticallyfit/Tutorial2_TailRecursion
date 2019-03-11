@@ -133,7 +133,23 @@ object TailRecursiveMadness {
       */
     def pascal(n:Int):List[Int] = {
 
-      // I'll let you fill in the middle this time
+
+      /**
+        * You're going to need a function that can sum a List[(Int, Int)].
+        * Let's do that tail recursively for you
+        */
+      @tailrec
+      def sumPairs(source:List[(Int, Int)], dest:List[Int] = Nil):List[Int] = {
+        // Notice we build up the destination by adding to the head.
+        // This gives the list in reverse, so we have to reverse it in the terminal case
+        source match {
+          case (a, b) :: tail => sumPairs(tail, (a + b) :: dest)
+          case Nil => dest.reverse
+        }
+      }
+
+
+      // I'll let you define the inner tail-recursive function this time.
 
       ???
     }
