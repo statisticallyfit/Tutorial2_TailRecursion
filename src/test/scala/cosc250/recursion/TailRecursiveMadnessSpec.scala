@@ -104,4 +104,46 @@ class TailRecursiveMadnessSpec extends FlatSpec with Matchers {
     fibonacci(9) should be (34)
     fibonacci(10) should be (55)
   }
+
+  "Roman" should "calculate the next (numeral, value) pair for a number" in {
+    import Roman._
+
+    nextNumeral(1) should be (("I", 1))
+    nextNumeral(3) should be (("I", 1))
+    nextNumeral(4) should be (("IV", 4))
+    nextNumeral(15) should be (("X", 10))
+    nextNumeral(100) should be (("C", 100))
+  }
+
+  it should "calculate Roman Numerals correctly" in {
+    import Roman._
+
+    roman(1) should be ("I")
+    roman(3) should be ("III")
+    roman(4) should be ("IV")
+    roman(10) should be ("X")
+    roman(104) should be ("CIV")
+    roman(1900) should be ("MCM")
+    roman(1988) should be ("MCMLXXXVIII")
+  }
+
+  "Puzzle" should "calculate the next line of the puzzle sequence" in {
+    import Puzzle._
+
+    nextLine(List(1)) should be (List(1, 1))
+    nextLine(List(1, 1)) should be (List(2, 1))
+    nextLine(List(2, 1)) should be (List(1, 2, 1, 1))
+    nextLine(List(1, 2, 1, 1)) should be (List(1, 1, 1, 2, 2, 1))
+  }
+
+  it should "work out the nth line of the puzzle" in {
+    import Puzzle._
+
+    puzzle(0) should be (List(1))
+    puzzle(1) should be (List(1, 1))
+    puzzle(2) should be (List(2, 1))
+    puzzle(3) should be (List(1, 2, 1, 1))
+    puzzle(4) should be (List(1, 1, 1, 2, 2, 1))
+
+  }
 }

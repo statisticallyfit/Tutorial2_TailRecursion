@@ -140,5 +140,107 @@ object TailRecursiveMadness {
 
   }
 
+  /**
+    * Oh no, it's the Roman numerals again.
+    *
+    * But that means I can put them in the solution!
+    * Let's define a tail recursive function for producing Roman numerals
+    */
+  object Roman {
+
+    /*
+     * I've put these in a List so we can recursively take the head off it, and work
+     * from big numerals to small.
+     */
+    val allNumerals = List(
+      "M" -> 1000, "CM" -> 900,
+      "C" -> 100, "XC" -> 90,
+      "L" -> 50, "XL" -> 40,
+      "X" -> 10, "IX" -> 9,
+      "V" -> 5, "IV" -> 4, "I" -> 1
+    )
+
+    /**
+      * First, define a tail recursive function that will select the first (numeral, number) pair
+      * from our list of numerals that is smaller than n.
+      *
+      * Keep the (numeral, value)s that are yet to be considered in the second argument.
+      *
+      * This is going to be our function for choosing the nextNumeral
+      */
+    // @tailrec
+    def nextNumeral(n:Int, numerals:List[(String, Int)] = allNumerals):(String, Int) = {
+      // either the head pair is the one we want, or call ourselves recursively for the tail
+      ???
+    }
+
+    /**
+      * Now we'll define our Roman numerals function
+      */
+    def roman(n:Int):String = {
+
+      // Now define an inner tail recursive function that will build up our Roman numeral
+      // We keep the string we've built so far in s
+      //@tailrec
+      def intRom(n:Int, s:String = ""):String = {
+        ???
+      }
+
+      intRom(n)
+    }
+
+
+  }
+
+
+  /**
+    * A puzzle list
+    *
+    * 1
+    * 1 1
+    * 2 1
+    * 1 2 1 1
+    * 1 1 1 2 2 1
+    *
+    * What's happening?
+    * Well, the top line has "one 1"
+    * And the next has "two 1s"
+    * And the next has "one 2, one 1"
+    * And the next has "one 1, one 2, two 1s"
+    *
+    */
+  object Puzzle {
+
+    /**
+      * Start off by defining a tail-recursive function that can produce the next line from the
+      * previous one. It's going to consume a "source" list and produce a "dest" list.
+      * The source list will get shorter each step until we've worked our way through it.
+      * We'll build up the dest list *backwards* because it's easier to append to the head of a list.
+      *
+      * Our terminal condition is if the source list is empty.
+      * If not, have two outer cases. Is the destination list empty or not?
+      * If not, does the number at the head of the source list match or not match dest(1)?
+      */
+    //@tailrec
+    def nextLine(source:List[Int], dest:List[Int] = Nil):List[Int] = {
+      ???
+    }
+
+    /**
+      * And now we write our puzzle call
+      */
+    def puzzle(n:Int):List[Int] = {
+
+      //@tailrec
+      def intPuz(n:Int, line:List[Int] = List(1)):List[Int] = {
+        ???
+      }
+
+      intPuz(n)
+    }
+
+
+  }
+
 
 }
