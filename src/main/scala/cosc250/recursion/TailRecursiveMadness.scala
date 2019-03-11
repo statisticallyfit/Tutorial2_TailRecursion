@@ -65,6 +65,17 @@ object TailRecursiveMadness {
       * Now add them up element by element to get pascal(n)
       */
     def pascal(n:Int):List[Int] = {
+
+      // You'll need a function that can sum tuples in a list
+      // Let's define that recursively for you
+      def sumPairs(l:List[(Int, Int)]):List[Int] = {
+        l match {
+          case (a,b) :: t => (a + b) :: sumPairs(t)
+          case Nil => Nil
+        }
+      }
+
+      // Now write the body of pascal(n)
       ???
     }
 
