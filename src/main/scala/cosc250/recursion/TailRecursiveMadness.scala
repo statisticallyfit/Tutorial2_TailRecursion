@@ -24,7 +24,7 @@ object TailRecursiveMadness {
       * factorial(n) is 1 * 2 * 3 * ... n
       */
     def factorial(n:Int):Int = {
-      ???
+      if(n <= 1) 1 else n * factorial(n - 1)
     }
 
     /**
@@ -38,7 +38,10 @@ object TailRecursiveMadness {
       * But unlike Int, summing BigInts has no maximum value.
       */
     def fibonacci(n:Int):BigInt = {
-      ???
+      if(n == 0) 0
+      else if(n == 1) 1
+      else fibonacci(n - 2) + fibonacci(n - 1)
+
     }
 
     // Puzzle: try calling it with a large number - say 100. What breaks?
@@ -70,13 +73,26 @@ object TailRecursiveMadness {
       // Let's define that recursively for you
       def sumPairs(l:List[(Int, Int)]):List[Int] = {
         l match {
-          case (a,b) :: t => (a + b) :: sumPairs(t)
+          case (a,b) :: tail => (a + b) :: sumPairs(tail)
           case Nil => Nil
         }
       }
 
       // Now write the body of pascal(n)
-      ???
+      if(n <= 0) List(1)
+      else {
+        val p = pascal(n - 1)
+        val paired = (0 +: p).zip(p :+ 0)
+        sumPairs(paired)
+      }
+    }
+
+    //Another pasccal
+    //NOTE: c = column index, starts at 0, r = row index, starts at 0 in the triangle
+    //returns: the pascal number at this position
+    def pascalAtPos(c: Int, r: Int): Int = {
+      if(c == 0 || c == r) 1
+      else pascalAtPos(c - 1, r - 1) + pascalAtPos(c, r - 1)
     }
 
   }
@@ -109,10 +125,10 @@ object TailRecursiveMadness {
 
       //@tailrec
       def fac(n:Int, accum:Int):Int = {
-        ???
+        if(n <= 0) accum else fac(n-1, accum * n)
       }
 
-      ???
+      fac(n, 1)
     }
 
 
@@ -130,10 +146,13 @@ object TailRecursiveMadness {
       // until you reach n=0
       //@tailrec
       def fibInt(n:Int, a:BigInt=0, b:BigInt=1):BigInt = {
-        ???
+        if(n <= 0) a
+        else {
+          fibInt(n - 1, b, a + b)
+        }
       }
 
-      ???
+      fibInt(n, 0, 1)
     }
 
     // Try fibonacci(60), but not too large or it will take a really long time.
@@ -162,7 +181,15 @@ object TailRecursiveMadness {
 
       // I'll let you define the inner tail-recursive function this time.
 
-      ???
+      def innerPasc(n: Int, acc: List[Int] = Nil): List[Int] = {
+        if(n <= 0) acc
+        else {
+          val paired = (0 +: acc).zip(acc :+ 0)
+          innerPasc(n - 1, sumPairs(paired))
+        }
+      }
+
+      innerPasc(n)
     }
 
   }
