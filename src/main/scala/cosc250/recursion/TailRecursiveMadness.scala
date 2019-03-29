@@ -67,11 +67,13 @@ object TailRecursiveMadness {
       * That gives the list twice, offset by one.
       * Now add them up element by element to get pascal(n)
       */
+    //note: This is the school solution
     def pascal(n:Int):List[Int] = {
 
       // You'll need a function that can sum tuples in a list
       // Let's define that recursively for you
       def sumPairs(l:List[(Int, Int)]):List[Int] = {
+
         l match {
           case (a,b) :: tail => (a + b) :: sumPairs(tail)
           case Nil => Nil
@@ -172,16 +174,17 @@ object TailRecursiveMadness {
       def sumPairs(source:List[(Int, Int)], dest:List[Int] = Nil):List[Int] = {
         // Notice we build up the destination by adding to the head.
         // This gives the list in reverse, so we have to reverse it in the terminal case
-        source match {
-          case (a, b) :: tail => sumPairs(tail, (a + b) :: dest)
+        source match { //note: can reverse these two cases and no issue ..
           case Nil => dest.reverse
+          case (a, b) :: tail => sumPairs(tail, (a + b) :: dest)
         }
       }
 
 
       // I'll let you define the inner tail-recursive function this time.
 
-      def innerPasc(n: Int, acc: List[Int] = Nil): List[Int] = {
+      //note: tricky - List(1) must be the base case, not Nil list
+      def innerPasc(n: Int, acc: List[Int] = List(1)): List[Int] = {
         if(n <= 0) acc
         else {
           val paired = (0 +: acc).zip(acc :+ 0)
@@ -225,7 +228,10 @@ object TailRecursiveMadness {
     // @tailrec
     def nextNumeral(n:Int, numerals:List[(String, Int)] = allNumerals):(String, Int) = {
       // either the head pair is the one we want, or call ourselves recursively for the tail
-      ???
+      numerals match {
+        case (romanLetter, value) :: _ if value <= n  => romanLetter -> value //returning this pair
+        case (_, value) :: tail if value > n          => nextNumeral(n, tail)
+      }
     }
 
     /**
@@ -236,8 +242,21 @@ object TailRecursiveMadness {
       // Now define an inner tail recursive function that will build up our Roman numeral
       // We keep the string we've built so far in s
       //@tailrec
-      def intRom(n:Int, s:String = ""):String = {
-        ???
+      def intRom(n:Int, accRoman:String = ""):String = {
+
+        /*if(n == 0){
+          return accRomanLetters
+        } else {
+          val (romanLetter, value) = nextNumeral(n)
+          intRom(n - value, accRomanLetters + romanLetter)
+        }*/
+        if(n == 0){
+          return accRoman
+        }
+        nextNumeral(n) match {
+          case (_, value) if value == 0 => accRoman //when no more numerals, return the accumulator string
+          case (romanLetter, value)  => intRom(n - value, accRoman + romanLetter)
+        }
       }
 
       intRom(n)
@@ -275,9 +294,19 @@ object TailRecursiveMadness {
       * If not, have two outer cases. Is the destination list empty or not?
       * If not, does the number at the head of the source list match or not match dest(1)?
       */
-    //@tailrec
-    def nextLine(source:List[Int], dest:List[Int] = Nil):List[Int] = {
-      ???
+    //TODO study more: got this solution
+
+    @tailrec
+    def nextLine(source:List[Int], acc:List[Int] = Nil):List[Int] = {
+      source match {
+
+        case Nil => acc.reverse
+        case x :: xs => acc match {
+
+          case a :: b :: tail if a == x   => nextLine(xs, a :: b + 1 :: tail)
+          case _                          => nextLine(xs, x :: 1 :: acc)
+        }
+      }
     }
 
     /**
@@ -285,14 +314,31 @@ object TailRecursiveMadness {
       */
     def puzzle(n:Int):List[Int] = {
 
-      //@tailrec
+      @tailrec
       def intPuz(n:Int, line:List[Int] = List(1)):List[Int] = {
-        ???
+        if (n == 0) line else intPuz(n - 1, nextLine(line))
       }
 
       intPuz(n)
     }
 
+    /**
+List(1)
+List(1, 1)
+List(2, 1)
+List(1, 2, 1, 1)
+List(1, 1, 1, 2, 2, 1)
+List(3, 1, 2, 2, 1, 1)
+List(1, 3, 1, 1, 2, 2, 2, 1)
+List(1, 1, 1, 3, 2, 1, 3, 2, 1, 1)
+List(3, 1, 1, 3, 1, 2, 1, 1, 1, 3, 1, 2, 2, 1)
+List(1, 3, 2, 1, 1, 3, 1, 1, 1, 2, 3, 1, 1, 3, 1, 1, 2, 2, 1, 1)
+List(1, 1, 1, 3, 1, 2, 2, 1, 1, 3, 3, 1, 1, 2, 1, 3, 2, 1, 1, 3, 2, 1, 2, 2, 2, 1)
+List(3, 1, 1, 3, 1, 1, 2, 2, 2, 1, 2, 3, 2, 1, 1, 2, 1, 1, 1, 3, 1, 2, 2, 1, 1, 3, 1, 2, 1, 1, 3, 2, 1, 1)
+List(1, 3, 2, 1, 1, 3, 2, 1, 3, 2, 1, 1, 1, 2, 1, 3, 1, 2, 2, 1, 1, 2, 3, 1, 1, 3, 1, 1, 2, 2, 2, 1, 1, 3, 1, 1, 1, 2, 2, 1, 1, 3, 1, 2, 2, 1)
+List(1, 1, 1, 3, 1, 2, 2, 1, 1, 3, 1, 2, 1, 1, 1, 3, 1, 2, 3, 1, 1, 2, 1, 1, 1, 3, 1, 1, 2, 2, 2, 1, 1, 2, 1, 3, 2, 1, 1, 3, 2, 1, 3, 2, 2, 1, 1, 3, 3, 1, 2, 2, 2, 1, 1, 3, 1, 1, 2...
+
+      */
 
   }
 
